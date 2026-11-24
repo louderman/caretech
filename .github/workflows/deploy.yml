@@ -1,9 +1,9 @@
 name: Deploy web build to GitHub Pages
 
-# NOT yet wired to run: Dan deleted github.com/louderman/caretech and will recreate it later.
-# This file is committed now so the repo is ready once the remote exists, but no trigger here
-# has ever executed it from this workspace.
+# Builds the Expo web export and publishes it to GitHub Pages under /caretech/.
 on:
+  push:
+    branches: [main]
   workflow_dispatch: {}
 
 permissions:
