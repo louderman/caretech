@@ -24,7 +24,7 @@ jobs:
         with:
           node-version: 20
       - run: npm ci
-      - run: npx expo export -p web --base-path /caretech
+      - run: npx expo export -p web
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

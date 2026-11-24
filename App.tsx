@@ -13,10 +13,28 @@ type Tab = 'journal' | 'record';
  * MainActivity. Picking an exercise pushes a full-screen ExerciseScreen over the tabs — the same
  * relationship ExerciseActivity has to MainActivity — rather than adding a third tab.
  */
+/**
+ * Debug-only: on web, `?fixture=1` shows the DebugFixture synthetic dataset instead of the
+ * real (empty on first launch) ObservationStore, so the full Journal — sessions, asymmetry
+ * chart, sensor readings — can be reviewed and screenshotted without a real brace. Never
+ * reachable on native and never touches real stored data.
+ */
+function useDebugFixtureFromUrl(): boolean {
+  return React.useMemo(() => {
+    if (typeof window === 'undefined' || typeof window.location === 'undefined') return false;
+    try {
+      return new URLSearchParams(window.location.search).get('fixture') === '1';
+    } catch {
+      return false;
+    }
+  }, []);
+}
+
 export default function App() {
   const [tab, setTab] = React.useState<Tab>('journal');
   const [exerciseIndex, setExerciseIndex] = React.useState<number | null>(null);
   const [highlight, setHighlight] = React.useState<Highlight | null>(null);
+  const debugFixture = useDebugFixtureFromUrl();
 
   if (exerciseIndex != null) {
     return (
@@ -39,7 +57,7 @@ export default function App() {
       <StatusBar style="dark" />
       <View style={styles.content}>
         {tab === 'journal' ? (
-          <JournalScreen onGoToRecord={() => setTab('record')} highlight={highlight} />
+          <JournalScreen onGoToRecord={() => setTab('record')} highlight={highlight} debugFixture={debugFixture} />
         ) : (
           <RecordScreen onSelect={(i) => setExerciseIndex(i)} />
         )}
