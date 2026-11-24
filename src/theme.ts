@@ -12,6 +12,9 @@
  * stays on ONE swappable source of truth instead of forking into two theme files.
  */
 import { Platform } from 'react-native';
+import { Sora_700Bold, Sora_800ExtraBold } from '@expo-google-fonts/sora';
+import { PlusJakartaSans_400Regular, PlusJakartaSans_600SemiBold } from '@expo-google-fonts/plus-jakarta-sans';
+import { JetBrainsMono_600SemiBold, JetBrainsMono_700Bold } from '@expo-google-fonts/jetbrains-mono';
 
 // ---------------------------------------------------------------------------
 // COLORS — Midnight-Atlas-shaped token set, CareTech "Progress story" values.
@@ -57,41 +60,25 @@ export const GRADIENTS = {
   subtle: ['#FFFFFF', '#F3FBF6'] as const,
 };
 
+// Real family names, loaded once via useFonts() in App.tsx (@expo-google-fonts/*) — same custom
+// faces on web and native, no Platform.select system-font approximation needed.
 export const FONTS = {
-  display: Platform.select({
-    ios: 'Avenir-Heavy',
-    android: 'sans-serif-condensed',
-    web: 'Sora, sans-serif',
-    default: 'sans-serif-medium',
-  }),
-  heading: Platform.select({
-    ios: 'Avenir-Heavy',
-    android: 'sans-serif-medium',
-    web: 'Sora, sans-serif',
-    default: 'sans-serif-medium',
-  }),
-  body: Platform.select({
-    ios: 'System',
-    android: 'sans-serif',
-    web: 'Plus Jakarta Sans, sans-serif',
-    default: 'System',
-  }),
-  mono: Platform.select({
-    ios: 'CourierNewPS-BoldMT',
-    android: 'monospace',
-    web: 'JetBrains Mono, monospace',
-    default: 'monospace',
-  }),
+  display: 'Sora_800ExtraBold',
+  heading: 'Sora_700Bold',
+  body: 'PlusJakartaSans_400Regular',
+  bodySemiBold: 'PlusJakartaSans_600SemiBold',
+  mono: 'JetBrainsMono_600SemiBold',
+  monoBold: 'JetBrainsMono_700Bold',
 };
 
-/** Loaded by App.tsx via @expo-google-fonts so web and native render the same families. */
+/** Passed to useFonts() in App.tsx. Keys are the exact family names FONTS references above. */
 export const FONT_ASSETS = {
-  Sora_700Bold: 'Sora_700Bold',
-  Sora_800ExtraBold: 'Sora_800ExtraBold',
-  PlusJakartaSans_400Regular: 'PlusJakartaSans_400Regular',
-  PlusJakartaSans_600SemiBold: 'PlusJakartaSans_600SemiBold',
-  JetBrainsMono_600SemiBold: 'JetBrainsMono_600SemiBold',
-  JetBrainsMono_700Bold: 'JetBrainsMono_700Bold',
+  Sora_700Bold,
+  Sora_800ExtraBold,
+  PlusJakartaSans_400Regular,
+  PlusJakartaSans_600SemiBold,
+  JetBrainsMono_600SemiBold,
+  JetBrainsMono_700Bold,
 } as const;
 
 export const THEME = {
