@@ -3,6 +3,7 @@ import { ScrollView, View, Text, Pressable, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { COLORS, THEME, GRADIENTS, SPACE, spacing, type as typeScale } from '../theme';
 import { NAMES, HINTS } from '../core/exercises';
+import { SensorsPanel } from '../components/SensorsPanel';
 
 export interface RecordScreenProps {
   onSelect: (index: number) => void;
@@ -31,16 +32,11 @@ export function RecordScreen({ onSelect }: RecordScreenProps) {
         </View>
 
         <Text style={[styles.sectionLabel, { marginTop: SPACE.stackMd }]}>Brace</Text>
-        <View style={[THEME.glassCard, styles.braceCard]}>
-          <Text style={styles.braceBody}>
-            A simulated brace feeds this build's exercise timer so the Journal's charts can be
-            previewed — no physical knee brace is connected yet.
-          </Text>
-          <Text style={styles.braceDetail}>
-            Real brace recordings will only be added once the hardware and its replay/BLE protocol
-            exist.
-          </Text>
-        </View>
+        <Text style={styles.braceDetail}>
+          Simulated data still drives the exercise timer above. Connect a real KneeSleeve here to
+          see its live signal.
+        </Text>
+        <SensorsPanel />
       </ScrollView>
     </View>
   );
