@@ -7,6 +7,7 @@ import { HomeScreen } from './src/screens/HomeScreen';
 import { DetailsScreen, type Highlight, HIGHLIGHT_MS } from './src/screens/DetailsScreen';
 import { RecordScreen } from './src/screens/RecordScreen';
 import { ExerciseScreen } from './src/screens/ExerciseScreen';
+import { ThemeSpecimenScreen } from './src/screens/ThemeSpecimenScreen';
 
 type Tab = 'home' | 'details' | 'record';
 
@@ -33,15 +34,41 @@ function useDebugFixtureFromUrl(): boolean {
   }, []);
 }
 
+/**
+ * Debug-only: on web, `?screen=specimen` shows the theme in isolation (type/colour/card/gradient
+ * specimen) instead of the normal tab app, so the look can be judged separately from any
+ * screen's layout. Never reachable on native and never wired to any UI control.
+ */
+function useDebugScreenFromUrl(): string | null {
+  return React.useMemo(() => {
+    if (typeof window === 'undefined' || typeof window.location === 'undefined') return null;
+    try {
+      return new URLSearchParams(window.location.search).get('screen');
+    } catch {
+      return null;
+    }
+  }, []);
+}
+
 export default function App() {
   const [fontsLoaded] = useFonts(FONT_ASSETS);
   const [tab, setTab] = React.useState<Tab>('home');
   const [exerciseIndex, setExerciseIndex] = React.useState<number | null>(null);
   const [highlight, setHighlight] = React.useState<Highlight | null>(null);
   const debugFixture = useDebugFixtureFromUrl();
+  const debugScreen = useDebugScreenFromUrl();
 
   if (!fontsLoaded) {
     return <View style={styles.safe} />;
+  }
+
+  if (debugScreen === 'specimen') {
+    return (
+      <SafeAreaView style={styles.safe}>
+        <StatusBar style="dark" />
+        <ThemeSpecimenScreen />
+      </SafeAreaView>
+    );
   }
 
   if (exerciseIndex != null) {

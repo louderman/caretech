@@ -1,6 +1,7 @@
 import React from 'react';
 import { ScrollView, View, Text, Pressable, StyleSheet } from 'react-native';
-import { colors, radii, spacing, type as typeScale } from '../theme';
+import { LinearGradient } from 'expo-linear-gradient';
+import { colors, COLORS, THEME, GRADIENTS, radii, spacing, type as typeScale } from '../theme';
 import { NAMES, KEYS, HINTS } from '../core/exercises';
 import * as SessionStore from '../core/sessionStore';
 import * as ObservationStore from '../core/observationStore';
@@ -127,7 +128,9 @@ export function ExerciseScreen({ index, onBackToJournal }: ExerciseScreenProps) 
   const shownHistory = [...history].reverse().slice(0, 10);
 
   return (
-    <ScrollView style={styles.scroll} contentContainerStyle={styles.content}>
+    <View style={styles.screen}>
+      <LinearGradient colors={GRADIENTS.subtle} style={StyleSheet.absoluteFill} pointerEvents="none" />
+      <ScrollView style={styles.scroll} contentContainerStyle={styles.content}>
       <Text style={styles.title}>{name}</Text>
       <Text style={styles.hint}>{hint}</Text>
       <Text style={styles.romCaption}>
@@ -135,7 +138,7 @@ export function ExerciseScreen({ index, onBackToJournal }: ExerciseScreenProps) 
       </Text>
 
       {summary && (
-        <View style={styles.receipt}>
+        <View style={[THEME.glassCardActive, styles.receipt]}>
           <View style={styles.receiptAccent} />
           <View style={{ flex: 1, marginLeft: 14 }}>
             <Text style={styles.receiptHeading}>Session saved</Text>
@@ -197,7 +200,8 @@ export function ExerciseScreen({ index, onBackToJournal }: ExerciseScreenProps) 
         Time alone is a personal record, not a score — a longer session can mean more repetitions
         or a steadier pace.
       </Text>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 }
 
@@ -220,7 +224,8 @@ async function romLine(key: string, startWallMs: number, finishWallMs: number): 
 }
 
 const styles = StyleSheet.create({
-  scroll: { flex: 1, backgroundColor: colors.bg },
+  screen: { flex: 1, backgroundColor: COLORS.background },
+  scroll: { flex: 1 },
   content: {
     paddingHorizontal: spacing.screenX,
     paddingTop: spacing.screenTopMin,
@@ -231,14 +236,13 @@ const styles = StyleSheet.create({
   romCaption: { ...typeScale.caption, color: colors.muted, marginTop: 10 },
   receipt: {
     flexDirection: 'row',
-    backgroundColor: colors.card,
-    borderRadius: 14,
     paddingVertical: 14,
+    paddingLeft: 0,
     paddingRight: 16,
     marginTop: 16,
     overflow: 'hidden',
   },
-  receiptAccent: { width: 4, backgroundColor: colors.success },
+  receiptAccent: { width: 4, backgroundColor: colors.success, borderRadius: 2 },
   receiptHeading: { ...typeScale.cardTitle, color: colors.success },
   receiptDetail: { ...typeScale.bodyBold, fontWeight: '400', color: colors.ink, marginTop: 6, lineHeight: 22 },
   backButton: {

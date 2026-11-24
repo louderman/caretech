@@ -1,83 +1,93 @@
 import React from 'react';
 import { ScrollView, View, Text, Pressable, StyleSheet } from 'react-native';
-import { colors, radii, borders, spacing, type as typeScale } from '../theme';
+import { LinearGradient } from 'expo-linear-gradient';
+import { COLORS, THEME, GRADIENTS, SPACE, spacing, type as typeScale } from '../theme';
 import { NAMES, HINTS } from '../core/exercises';
 
 export interface RecordScreenProps {
   onSelect: (index: number) => void;
 }
 
-/** Lists the four fixed exercises, plus a plain statement of the brace/sensor situation. */
+/** Lists the four fixed exercises, plus a plain statement of the brace/sensor situation.
+ * Restyled onto the "Progress story" glass-card look (see Home) — same soft mint wash, same
+ * translucent bordered cards — so Record reads as part of one app rather than a leftover
+ * sensor-dashboard screen. */
 export function RecordScreen({ onSelect }: RecordScreenProps) {
   return (
-    <ScrollView style={styles.scroll} contentContainerStyle={styles.content}>
-      <Text style={styles.sectionLabel}>Exercises</Text>
-      {NAMES.map((name, i) => (
-        <ExerciseRow key={name} index={i} name={name} hint={HINTS[i]} onPress={() => onSelect(i)} />
-      ))}
+    <View style={styles.screen}>
+      <LinearGradient colors={GRADIENTS.subtle} style={StyleSheet.absoluteFill} pointerEvents="none" />
+      <ScrollView style={styles.scroll} contentContainerStyle={styles.content}>
+        <Text style={styles.sectionLabel}>Exercises</Text>
+        <View style={THEME.glassCard}>
+          {NAMES.map((name, i) => (
+            <ExerciseRow
+              key={name}
+              name={name}
+              hint={HINTS[i]}
+              onPress={() => onSelect(i)}
+              last={i === NAMES.length - 1}
+            />
+          ))}
+        </View>
 
-      <Text style={[styles.sectionLabel, { marginTop: 24 }]}>Brace</Text>
-      <View style={styles.braceCard}>
-        <Text style={styles.braceBody}>
-          A simulated brace feeds this build's exercise timer so the Journal's charts can be
-          previewed — no physical knee brace is connected yet.
-        </Text>
-        <Text style={styles.braceDetail}>
-          Real brace recordings will only be added once the hardware and its replay/BLE protocol
-          exist.
-        </Text>
-      </View>
-    </ScrollView>
+        <Text style={[styles.sectionLabel, { marginTop: SPACE.stackMd }]}>Brace</Text>
+        <View style={[THEME.glassCard, styles.braceCard]}>
+          <Text style={styles.braceBody}>
+            A simulated brace feeds this build's exercise timer so the Journal's charts can be
+            previewed — no physical knee brace is connected yet.
+          </Text>
+          <Text style={styles.braceDetail}>
+            Real brace recordings will only be added once the hardware and its replay/BLE protocol
+            exist.
+          </Text>
+        </View>
+      </ScrollView>
+    </View>
   );
 }
 
-function ExerciseRow({ name, hint, onPress }: { index: number; name: string; hint: string; onPress: () => void }) {
+function ExerciseRow({ name, hint, onPress, last }: { name: string; hint: string; onPress: () => void; last: boolean }) {
   return (
-    <Pressable
-      onPress={onPress}
-      accessibilityRole="button"
-      accessibilityLabel={`${name}. Opens the session screen with start, finish and save.`}
-      style={styles.row}
-    >
-      <View style={{ flex: 1 }}>
-        <Text style={styles.rowTitle}>{name}</Text>
-        <Text style={styles.rowHint}>{hint}</Text>
-      </View>
-      <Text style={styles.chevron}>{'\u203A'}</Text>
-    </Pressable>
+    <View>
+      <Pressable
+        onPress={onPress}
+        accessibilityRole="button"
+        accessibilityLabel={`${name}. Opens the session screen with start, finish and save.`}
+        style={styles.row}
+      >
+        <View style={{ flex: 1 }}>
+          <Text style={styles.rowTitle}>{name}</Text>
+          <Text style={styles.rowHint}>{hint}</Text>
+        </View>
+        <Text style={styles.chevron}>{'\u203A'}</Text>
+      </Pressable>
+      {!last && <View style={styles.rowDivider} />}
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  scroll: { flex: 1, backgroundColor: colors.bg },
+  screen: { flex: 1, backgroundColor: COLORS.background },
+  scroll: { flex: 1 },
   content: {
     paddingHorizontal: spacing.screenX,
     paddingTop: spacing.screenTopMin,
     paddingBottom: spacing.screenBottom,
   },
-  sectionLabel: { ...typeScale.sectionLabel, color: colors.ink },
+  sectionLabel: { ...typeScale.sectionLabel, color: COLORS.text },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.white,
-    borderRadius: radii.exerciseRow,
-    borderWidth: borders.exerciseRow,
-    borderColor: colors.divider,
-    paddingHorizontal: 16,
     paddingVertical: 14,
     minHeight: 64,
-    marginTop: 10,
   },
-  rowTitle: { ...typeScale.exerciseTitle, color: colors.ink },
-  rowHint: { ...typeScale.exerciseHint, color: colors.muted, marginTop: 3 },
-  chevron: { fontSize: 28, fontWeight: '700', color: colors.muted },
-  braceCard: {
-    backgroundColor: colors.card,
-    borderRadius: 12,
-    padding: 14,
-  },
-  braceBody: { ...typeScale.body, color: colors.ink },
-  braceDetail: { ...typeScale.caption, color: colors.muted, marginTop: 6 },
+  rowDivider: { height: 1, backgroundColor: COLORS.divider },
+  rowTitle: { ...typeScale.exerciseTitle, color: COLORS.text },
+  rowHint: { ...typeScale.exerciseHint, color: COLORS.textSecondary, marginTop: 3 },
+  chevron: { fontSize: 28, fontWeight: '700', color: COLORS.muted },
+  braceCard: { padding: spacing.cardPadding },
+  braceBody: { ...typeScale.body, color: COLORS.text },
+  braceDetail: { ...typeScale.caption, color: COLORS.muted, marginTop: 6 },
 });
 
 export default RecordScreen;

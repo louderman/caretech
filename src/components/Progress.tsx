@@ -236,7 +236,7 @@ const styles = StyleSheet.create({
   pbRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: 10 },
   pbName: { ...typeScale.body, color: COLORS.text, flex: 1 },
   pbValueCol: { alignItems: 'flex-end' },
-  pbValue: { fontFamily: undefined, fontSize: 18, fontWeight: '700', color: COLORS.highlight },
+  pbValue: { fontFamily: THEME.statValue.fontFamily, fontSize: 18, fontWeight: '700', color: COLORS.highlight, letterSpacing: 0.5 },
   pbChange: { ...typeScale.small, color: COLORS.positive, marginTop: 2 },
   pbDivider: { height: 1, backgroundColor: COLORS.divider },
   streakMiniRow: { flexDirection: 'row', alignItems: 'flex-end' },
